@@ -2,13 +2,12 @@
 
 #include "Editor/EditorEngine.h"
 
-USGEditorBlueprintLibrary::USGEditorBlueprintLibrary(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer)
-{
-}
 
 bool USGEditorBlueprintLibrary::EditorDeprojectScreenToWorld(const FVector2D& ScreenPosition, FVector& WorldPosition, FVector& WorldDirection)
 {
+
+
+
 	if (GIsEditor)
 	{
 		FTransform EditorViewportTransform;
@@ -22,6 +21,8 @@ bool USGEditorBlueprintLibrary::EditorDeprojectScreenToWorld(const FVector2D& Sc
 
 		int32 X = SizeX;
 		int32 Y = SizeY;
+
+
 
 		X += ActiveViewport->GetInitialPositionXY().X;
 		Y += ActiveViewport->GetInitialPositionXY().Y;

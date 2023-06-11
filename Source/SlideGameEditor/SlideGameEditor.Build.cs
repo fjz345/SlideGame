@@ -35,15 +35,5 @@ public class SlideGameEditor : ModuleRules
             {
                 "UnrealEd",
             });
-
-        PrivateIncludePathModuleNames.AddRange(
-            new string[]
-            {
-            });
-
-        DynamicallyLoadedModuleNames.AddRange(
-            new string[]
-            {
-            });
     }
 }

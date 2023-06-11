@@ -5,10 +5,10 @@
 
 #include "SGEditorBlueprintLibrary.generated.h"
 
-UCLASS(meta = (ScriptName = "EditorBlueprintLibrary"))
+UCLASS(meta = (ScriptName = "SGEditorBlueprintLibrary"))
 class SLIDEGAMEEDITOR_API USGEditorBlueprintLibrary : public UBlueprintFunctionLibrary
 {
-	GENERATED_UCLASS_BODY()
+	GENERATED_BODY()
 
 public:
 	UFUNCTION(BlueprintPure, Category = "Camera", meta = (Keywords = "unproject"))

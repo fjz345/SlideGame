@@ -9,7 +9,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogSlideGameEditor, All, All);
 
-class FSlideGameEditorModule : public IModuleInterface
+class SLIDEGAMEEDITOR_API FSlideGameEditorModule : public IModuleInterface
 {
 public:
     virtual void StartupModule() override;
