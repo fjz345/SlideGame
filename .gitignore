@@ -1,3 +1,7 @@
+# FJZ345
+Content/*
+.vsconfig
+
 # Visual Studio 2015 user specific files
 .vs/
 
