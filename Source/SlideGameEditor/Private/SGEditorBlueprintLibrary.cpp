@@ -1,42 +1,67 @@
 #include "SGEditorBlueprintLibrary.h"
 
 #include "Editor/EditorEngine.h"
+#include "Kismet/GameplayStatics.h"
+#include "LevelEditorViewport.h"
+#include "Slate/SceneViewport.h"
 
 
-bool USGEditorBlueprintLibrary::EditorDeprojectScreenToWorld(const FVector2D& ScreenPosition, FVector& WorldPosition, FVector& WorldDirection)
+bool USGEditorBlueprintLibrary::EditorGetCursorWorldLocationFromMousePos(UObject* WorldContextObject, FVector& WorldPosition, FVector& WorldDirection)
 {
+	const TArray<class FLevelEditorViewportClient*>& clients = GEditor->GetLevelViewportClients();
 
-
-
-	if (GIsEditor)
+	FLevelEditorViewportClient* FoundClient = nullptr;
+	for (auto& EditorViewportClient : clients)
 	{
-		FTransform EditorViewportTransform;
-		GEditor->GetSimulateInEditorViewTransform(EditorViewportTransform);
-		FSceneViewProjectionData ProjectionData;
-
-		FViewport* ActiveViewport = GEditor->GetActiveViewport();
-		
-		int32 SizeX = ActiveViewport->GetSizeXY().X;
-		int32 SizeY = ActiveViewport->GetSizeXY().Y;
-
-		int32 X = SizeX;
-		int32 Y = SizeY;
-
-
-
-		X += ActiveViewport->GetInitialPositionXY().X;
-		Y += ActiveViewport->GetInitialPositionXY().Y;
-
-		FIntRect UnconstrainedRectangle = FIntRect(X, Y, X + SizeX, Y + SizeY);
+		if (EditorViewportClient->GetWorld() == WorldContextObject->GetWorld())
 		{
-			FMatrix const InvViewProjMatrix = EditorViewportTransform.ToMatrixWithScale().InverseFast();
-			FSceneView::DeprojectScreenToWorld(ScreenPosition, UnconstrainedRectangle, InvViewProjMatrix, /*out*/ WorldPosition, /*out*/ WorldDirection);
-			return true;
+			FoundClient = EditorViewportClient;
 		}
+	}
+
+	if (FoundClient)
+	{
+		FSceneViewFamilyContext ViewFamily(FSceneViewFamily::ConstructionValues(
+			FoundClient->Viewport,
+			FoundClient->GetScene(),
+			FoundClient->EngineShowFlags).SetRealtimeUpdate(FoundClient->IsRealtime()));		// why SetRealtimeUpdate here??
+		FSceneView* View = FoundClient->CalcSceneView(&ViewFamily);
+
+		WorldPosition = FoundClient->GetCursorWorldLocationFromMousePos().GetOrigin();
+		WorldDirection = FoundClient->GetCursorWorldLocationFromMousePos().GetDirection();
+		return true;
 	}
 
 	// something went wrong, zero things and return false
 	WorldPosition = FVector::ZeroVector;
 	WorldDirection = FVector::ZeroVector;
+	return false;
+}
+
+bool USGEditorBlueprintLibrary::EditorGetCameraLocation(FVector& WorldLocation)
+{
+	const TArray<class FLevelEditorViewportClient*>& clients = GEditor->GetLevelViewportClients();
+
+	FLevelEditorViewportClient* FoundClient = nullptr;
+	for (auto& EditorViewportClient : clients)
+	{
+		if (EditorViewportClient->IsSimulateInEditorViewport())
+		{
+			FoundClient = EditorViewportClient;
+		}
+	}
+
+	if (FoundClient)
+	{
+		FSceneViewFamilyContext ViewFamily(FSceneViewFamily::ConstructionValues(
+			FoundClient->Viewport,
+			FoundClient->GetScene(),
+			FoundClient->EngineShowFlags).SetRealtimeUpdate(FoundClient->IsRealtime()));		// why SetRealtimeUpdate here??
+		FSceneView* View = FoundClient->CalcSceneView(&ViewFamily);
+		WorldLocation = View->ViewMatrices.GetViewOrigin();
+		return true;
+	}
+
+	WorldLocation = { 0.0, 0.0, 0.0 };
 	return false;
 }

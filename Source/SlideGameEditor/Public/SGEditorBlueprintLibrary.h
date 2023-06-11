@@ -11,6 +11,9 @@ class SLIDEGAMEEDITOR_API USGEditorBlueprintLibrary : public UBlueprintFunctionL
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintPure, Category = "Camera", meta = (Keywords = "unproject", WorldContext = "WorldContextObject"))
+		static bool EditorGetCursorWorldLocationFromMousePos(UObject* WorldContextObject, FVector& WorldPosition, FVector& WorldDirection);
+
 	UFUNCTION(BlueprintPure, Category = "Camera", meta = (Keywords = "unproject"))
-		static bool EditorDeprojectScreenToWorld(const FVector2D& ScreenPosition, FVector& WorldPosition, FVector& WorldDirection);
+		static bool EditorGetCameraLocation(FVector& WorldLocation);
 };
