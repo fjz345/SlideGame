@@ -1,0 +1,26 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{E0C75454-4D8B-CBBF-AA59-8DA2E257A5D6}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "SlideGame",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		},
+		{
+			"Name": "ZPlugin",
+			"Enabled": true
+		}
+	]
+}
